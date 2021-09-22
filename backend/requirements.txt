@@ -1,0 +1,14 @@
+asgiref
+black
+celery
+Django
+django-cors-headers
+django-environ
+django-filter
+djangorestframework
+flake8
+gunicorn
+isort
+Pillow
+redis
+sqlparse

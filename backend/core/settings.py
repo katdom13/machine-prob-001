@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'core.apps.promo.apps.PromoConfig',
     'rest_framework',
     'corsheaders',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -172,3 +173,9 @@ CORS_ALLOW_CREDENTIALS = True
 # Media
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media/'
+
+
+# Twilio
+TWILIO_ACCOUNT_SID = env('TWILIO_ACCOUNT_SID')
+TWILIO_AUTH_TOKEN = env('TWILIO_AUTH_TOKEN')
+TWILIO_PHONE_NUMBER = env('TWILIO_PHONE_NUMBER')

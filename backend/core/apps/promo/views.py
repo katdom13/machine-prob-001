@@ -1,10 +1,10 @@
 from core.apps.coupon.models import Coupon
-from rest_framework import viewsets
+from rest_framework import views, viewsets
 from rest_framework.response import Response
 from twilio.base.exceptions import TwilioRestException
 
 from .models import Promo
-from .serializers import PromoSerializer
+from .serializers import PromoSerializer, ReCaptchaSerializer
 
 
 class PromoViewSet(viewsets.ModelViewSet):
@@ -13,9 +13,6 @@ class PromoViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         # Get IP addresss and User-Agent
-        print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
-        print(request.META.get('REMOTE_ADDR'))
-
         try:
             code = request.data.get('code')
             mobile = request.data.get('mobile')
@@ -48,3 +45,13 @@ class PromoViewSet(viewsets.ModelViewSet):
             return Response({
                 'error': 'Unable to create record: The number is unverified. Trial accounts cannot send messages to unverified numbers; verify at twilio.com/user/account/phone-numbers/verified, or purchase a Twilio number to send messages to unverified numbers.'
             }, status=400)
+
+
+class VerifyTokenAPI(views.APIView):
+    allowed_methods = ["POST"]
+
+    def post(self, request, *args, **kwargs):
+        serializer = ReCaptchaSerializer(data=request.data)
+        if serializer.is_valid():
+            return Response({'success': True}, status=200)
+        return Response(serializer.errors, status=400)

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 
 import {
   Alert,
@@ -7,17 +7,19 @@ import {
   Card,
   CardActions,
   CardContent,
-  CardHeader,
   Container,
   Divider,
   TextField,
   Typography,
 } from "@mui/material"
+import Router from "next/router"
+import ReCAPTCHA from "react-google-recaptcha"
 
-import { submitEntry } from "../config/axios"
+import { submitEntry, verifyCaptcha } from "../config/axios"
 
 export default function Home() {
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isVerified, setIsVerified] = useState(false)
 
   const initialFormData = {
     code: "",
@@ -46,20 +48,39 @@ export default function Home() {
     setFormErrors({})
     setAlert({ ...alert, message: "" })
 
-    submitEntry(formData.code, formData.mobile)
-      .then(() => setIsSubmitted(true))
+    if (isSubmitted) {
+      Router.reload()
+    } else {
+      if (isVerified) {
+        submitEntry(formData.code, formData.mobile)
+          .then(() => setIsSubmitted(true))
+          .catch((err) => {
+            if (err && err.response) {
+              if ([404, 409].includes(err.response.status)) {
+                setAlert({ ...alert, message: err.response.data.error })
+              }
+              if (err.response.status === 400) {
+                setFormErrors({
+                  ...formErrors,
+                  ...err.response.data,
+                })
+              }
+            }
+          })
+      } else {
+        setAlert({
+          ...alert,
+          message: "Please accomplish the recaptcha first",
+        })
+      }
+    }
+  }
+
+  const handleCaptcha = (token) => {
+    verifyCaptcha(token)
+      .then(() => setIsVerified(true))
       .catch((err) => {
-        if (err && err.response) {
-          if ([404, 409].includes(err.response.status)) {
-            setAlert({ ...alert, message: err.response.data.error })
-          }
-          if (err.response.status === 400) {
-            setFormErrors({
-              ...formErrors,
-              ...err.response.data,
-            })
-          }
-        }
+        console.log("[RECAPTCHA ERROR]", err && err.response ? err.response : err)
       })
   }
 
@@ -148,6 +169,14 @@ export default function Home() {
               </Button>
             </CardActions>
           </Card>
+          {isSubmitted ? null : (
+            <Box display="flex" justifyContent="center" marginY={2}>
+              <ReCAPTCHA
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                onChange={handleCaptcha}
+              />
+            </Box>
+          )}
         </form>
       </Container>
     </Box>

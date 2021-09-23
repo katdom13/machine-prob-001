@@ -32,4 +32,9 @@ const submitEntry = async (code, mobile) => {
   return invoke("promo/", "post", data)
 }
 
-export { submitEntry }
+const verifyCaptcha = async (token) => {
+  const data = { recaptcha: token }
+  return invoke("recaptcha/", "post", data)
+}
+
+export { submitEntry, verifyCaptcha }

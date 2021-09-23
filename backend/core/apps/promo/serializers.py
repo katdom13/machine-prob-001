@@ -1,5 +1,6 @@
 from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
+from rest_framework_recaptcha.fields import ReCaptchaField
 
 from .models import Promo
 
@@ -35,3 +36,7 @@ class PromoSerializer(serializers.ModelSerializer):
             ip = request.META.get('REMOTE_ADDR')
 
         return ip
+
+
+class ReCaptchaSerializer(serializers.Serializer):
+    recaptcha = ReCaptchaField()

@@ -44,11 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core.apps.coupon.apps.CouponConfig',
-    'core.apps.promo.apps.PromoConfig',
     'rest_framework',
     'corsheaders',
     'phonenumber_field',
+    'rest_framework_recaptcha',
+    'core.apps.coupon.apps.CouponConfig',
+    'core.apps.promo.apps.PromoConfig',
 ]
 
 MIDDLEWARE = [
@@ -179,3 +180,6 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 TWILIO_ACCOUNT_SID = env('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = env('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = env('TWILIO_PHONE_NUMBER')
+
+# Recaptcha
+DRF_RECAPTCHA_SECRET_KEY = env('RECAPTCHA_SECRET_KEY')

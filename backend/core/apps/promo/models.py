@@ -34,8 +34,4 @@ class Promo(models.Model):
         #     from_=settings.TWILIO_PHONE_NUMBER,
         #     to=str(self.mobile)
         # )
-
-        # print('==============MESSAGE SID===============')
-        # print(message.sid)
-
         return super().save(*args, **kwargs)

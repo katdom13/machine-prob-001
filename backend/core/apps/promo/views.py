@@ -16,8 +16,9 @@ class PromoViewSet(viewsets.ModelViewSet):
         try:
             code = request.data.get('code')
             mobile = request.data.get('mobile')
+            hashed_code = Coupon.hash_code(code)
 
-            coupon = Coupon.objects.filter(code=code).first()
+            coupon = Coupon.objects.filter(code=hashed_code).first()
 
             if not coupon:
                 return Response({

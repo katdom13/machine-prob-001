@@ -19,12 +19,14 @@ from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
 
-from core.apps import promo
+from core.apps.coupon.views import UploadCouponList
+from core.apps.promo.views import VerifyTokenAPI
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/promo/', include('core.apps.promo.urls', namespace='promo')),
-    path('api/v1/recaptcha/', promo.views.VerifyTokenAPI.as_view())
+    path('api/v1/recaptcha/', VerifyTokenAPI.as_view()),
+    path('api/v1/coupon/upload/', UploadCouponList.as_view())
 ]
 
 if settings.DEBUG:

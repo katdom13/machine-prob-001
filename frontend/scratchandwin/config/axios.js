@@ -37,4 +37,20 @@ const verifyCaptcha = async (token) => {
   return invoke("recaptcha/", "post", data)
 }
 
-export { submitEntry, verifyCaptcha }
+const uploadCouponList = async (file, is_rewrite = false, onUploadProgress) => {
+  let formData = new FormData()
+  formData.append("file", file)
+
+  return instance.post(
+    `coupon/upload/${is_rewrite ? "?rewrite=True" : ""}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      onUploadProgress,
+    }
+  )
+}
+
+export { submitEntry, verifyCaptcha, uploadCouponList }

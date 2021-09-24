@@ -1,4 +1,5 @@
 from core.apps.coupon.models import Coupon
+from core.utils import hash_string
 from rest_framework import views, viewsets
 from rest_framework.response import Response
 from twilio.base.exceptions import TwilioRestException
@@ -16,7 +17,7 @@ class PromoViewSet(viewsets.ModelViewSet):
         try:
             code = request.data.get('code')
             mobile = request.data.get('mobile')
-            hashed_code = Coupon.hash_code(code)
+            hashed_code = hash_string(code)
 
             coupon = Coupon.objects.filter(code=hashed_code).first()
 

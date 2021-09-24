@@ -4,7 +4,7 @@ import { apiUrl } from "./apiUrl"
 
 const instance = axios.create({
   baseURL: apiUrl,
-  timeout: 12000,
+  timeout: 300000,
   headers: {
     "Content-Type": "application/json",
     accept: "application/json",

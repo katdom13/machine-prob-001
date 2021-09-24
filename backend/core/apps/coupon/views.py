@@ -1,6 +1,7 @@
 import os
 
 from core.apps.coupon.models import Coupon
+from core.utils import hash_string
 from django.conf import settings
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
@@ -25,17 +26,16 @@ class UploadCouponList(APIView):
         with open(saved_file, 'r') as sfile:
             codes = sfile.read().splitlines()
 
+        codes = [hash_string(code) for code in codes]
+
         if rewrite:
             is_rewrite = True if rewrite.lower() in ['true', '1'] else False
 
         if is_rewrite:
             Coupon.objects.all().delete()
 
-        for code in codes:
-            hashed_code = Coupon.hash_code(code)
-            coupon = Coupon.objects.filter(code=hashed_code).first()
-            if not coupon:
-                Coupon.objects.create(code=code)
+        coupon_list = [Coupon(code=code) for code in codes]
+        Coupon.objects.bulk_create(coupon_list, ignore_conflicts=True)
 
         return Response({
             'success': 'All coupons uploaded to the database.'

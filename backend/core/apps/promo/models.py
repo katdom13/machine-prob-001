@@ -29,9 +29,9 @@ class Promo(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        # message = twilio_client.messages.create(
-        #     body=f'You have successfully won a prize using coupon code: {self.coupon.code}. Please contact us to receive instructions to claim the prize.',
-        #     from_=settings.TWILIO_PHONE_NUMBER,
-        #     to=str(self.mobile)
-        # )
+        twilio_client.messages.create(
+            body=f'You have successfully won a prize using coupon code: {self.coupon.code}. Please contact us to receive instructions to claim the prize.',
+            from_=settings.TWILIO_PHONE_NUMBER,
+            to=str(self.mobile)
+        )
         return super().save(*args, **kwargs)

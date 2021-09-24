@@ -1,4 +1,3 @@
-import hashlib
 import uuid
 
 from django.db import models
@@ -26,8 +25,3 @@ class Coupon(models.Model):
         auto_now_add=True,
         editable=False
     )
-
-    @classmethod
-    def hash_code(cls, code):
-        hash_object = hashlib.sha256(code.encode('utf-8'))
-        return hash_object.hexdigest()

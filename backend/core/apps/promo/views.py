@@ -2,6 +2,7 @@ from core.apps.coupon.models import Coupon
 from core.utils import hash_string
 from rest_framework import views, viewsets
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
 from twilio.base.exceptions import TwilioRestException
 
 from .models import Promo
@@ -9,6 +10,7 @@ from .serializers import PromoSerializer, ReCaptchaSerializer
 
 
 class PromoViewSet(viewsets.ModelViewSet):
+    throttle_classes = [AnonRateThrottle]
     serializer_class = PromoSerializer
     queryset = Promo.objects.all()
 

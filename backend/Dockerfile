@@ -13,6 +13,7 @@ RUN set -ex \
   && pip install --upgrade pip \
   && pip install --no-cache-dir -r requirements.txt
 
+RUN python3 manage.py collectstatic --noinput
 RUN python3 manage.py makemigrations
 RUN python3 manage.py migrate
 RUN python3 manage.py createsuperuser --noinput --username admin --email admin@admin.com

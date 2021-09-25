@@ -59,6 +59,12 @@ export default function Home() {
               if ([404, 409].includes(err.response.status)) {
                 setAlert({ ...alert, message: err.response.data.error })
               }
+              if (err.response.status === 429) {
+                setAlert({
+                  ...alert,
+                  message: "You have reached your limit for today",
+                })
+              }
               if (err.response.status === 400) {
                 setFormErrors({
                   ...formErrors,
@@ -81,6 +87,12 @@ export default function Home() {
       .then(() => setIsVerified(true))
       .catch((err) => {
         console.log("[RECAPTCHA ERROR]", err && err.response ? err.response : err)
+        if (err.response.status === 429) {
+          setAlert({
+            ...alert,
+            message: "You have reached your limit for today",
+          })
+        }
       })
   }
 

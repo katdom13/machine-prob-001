@@ -187,6 +187,19 @@ https://dbdiagram.io/d/614a5347825b5b01460d18fb
 
   ![](docs/throttle_error.PNG)
   
+  Note: The rate limit for the app is 5 attempts per day for each IP address
+  
+  ```
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/day',
+        'user': '5/day'
+    }
+  ```
+  
 * use captcha also if possible to prevent bots
 
   ![](docs/recaptcha_error.PNG)
